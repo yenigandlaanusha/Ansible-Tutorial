@@ -1,0 +1,41 @@
+# To run the playbook ansible-playbook EC2_MySql_playbook.yml -i "your_ec2_instance_ip_address," --private_key=your_pem_file_path.pem
+---
+- name : Install and Configure MySQL on EC2
+  hosts: your_ec2_instance #ip address of EC2 Instance
+  become :  yes
+  vars :
+    mysql_root_password : your_mysql_password
+  tasks :
+    - name : update apt cache
+      become : yes
+      apt :
+        update_cache : yes
+      when : ansible_os_family == 'Debian'
+      tags:
+        - update_cache
+        
+  - name : Install MYSQL Server
+        become : yes
+        apt :
+          name : mysql-server
+          state : present
+        when : ansible_os_family == 'Debian' || #RedHat #(if it is for redhat)
+        tags:
+          - install_mysql
+          
+  - name : start MYSQL service
+      become : yes
+      apt :
+        name : mysql
+        state : started
+      when : ansible_os_family == 'Debian'
+      tags:
+        - start_mysql
+        
+  - name : secure MySQL installation
+      mysql_user : yes
+        name : root
+        password : "{{ mysql_root_password }}"
+        host : localhost
+      tags:
+        - secure_mysql
