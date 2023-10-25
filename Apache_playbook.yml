@@ -1,0 +1,19 @@
+#Install Apache server and start the apache service on target machine
+
+---
+- name : Install Apache
+  hosts : web server
+  become : root
+  tasks:
+    - name : Update apt cache
+      apt : 
+        update_cache : yes
+    - name : Install Apache
+      apt : 
+        name : apache2
+        state : present
+    - name : Start Apache service
+      service : 
+        name : apache2
+        state : started
+        
