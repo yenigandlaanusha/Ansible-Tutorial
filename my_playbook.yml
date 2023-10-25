@@ -1,0 +1,21 @@
+#In this playbook, we are updating the cache and installing Nginx and starting the nginx server
+#to run the playbook use this command : ansible-playbook -i inventory my_playbook.yml
+#Ansible will take care of installing the nginx in our target node
+
+---
+- name : Install Nginx
+  hosts : web
+  become : root
+  tasks:
+    - name : Update apt cache
+      apt : 
+        update_cache : yes
+    - name : Install Nginx
+      apt : 
+        name : nginx
+        state : present
+    - name : Start Nginx
+      service : 
+        name : nginx
+        state : started
+        
