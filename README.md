@@ -35,3 +35,10 @@ Add Inventory File : In Inventory file, we add the IP address of managed nodes
 For Linux SSH key : Generate ssh-keygen and add your public key in target nodes
 
 Test the connection : ansible -m ping -i inventory all
+
+**Playbook**
+Ansible Playbook are files written in YAML format, which define a series of tasks and configurations. These tasks can include anything from installing software and updating configurations to restarting the services.
+
+Playbooks are like a receipes that tells Ansible what to do on each target system, and they can be version-controlled, shared, and reused across different projects
+
+
