@@ -1,0 +1,20 @@
+# File: health_checks.yml
+ansible all -i inventory -m setup -a "filter=*ansible_processor_vcpus*" -u 
+
+---
+- name: Routine Health Checks
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Check CPU and Memory utilization
+      ansible.builtin.debug:
+        var: ansible_facts['ansible_processor_vcpus']
+
+    - name: Check free disk space
+      command: "df -h"
+      register: disk_space
+
+    - name: Display disk space
+      debug:
+        var: disk_space.stdout_lines
