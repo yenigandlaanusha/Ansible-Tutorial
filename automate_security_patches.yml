@@ -1,0 +1,29 @@
+For applying security patches to all servers in your environment.
+---
+- name: Apply Security Patches
+  hosts: all
+  become: true  # Run tasks with elevated privileges (sudo)
+
+  tasks:
+    - name: Update package cache
+      package:
+        name: "*"
+        state: latest
+        update_cache: yes
+
+    - name: Upgrade all packages
+      package:
+        name: "*"
+        state: latest
+
+    - name: Restart services if needed
+      command: "needs-restarting -r"
+      register: needs_restart
+      ignore_errors: yes
+
+    - name: Restart servers if services were restarted
+      command: "reboot"
+      when: needs_restart.rc == 0
+      async: 0
+      poll: 0
+      ignore_errors: yes
